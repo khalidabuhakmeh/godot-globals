@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmhkg0wj44m1i"]
+
+[ext_resource type="Script" path="res://Control.cs" id="1_k4wxp"]
+
+[sub_resource type="GDScript" id="GDScript_w0us6"]
+script/source = "extends Label
+
+func _ready() -> void:
+	GameManager.ScoreChanged.connect(update_score)
+	
+func update_score(score: int) -> void:
+	text = str(score)
+"
+
+[sub_resource type="GDScript" id="GDScript_mh4hl"]
+script/source = "extends Button
+
+@export var score_value := 100
+
+func _on_pressed() -> void:
+	GameManager.IncrementScore(score_value)
+"
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k4wxp")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "Current Count: "
+
+[node name="Count" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "0"
+script = SubResource("GDScript_w0us6")
+
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Increase Count"
+script = SubResource("GDScript_mh4hl")
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Button" to="CenterContainer/VBoxContainer/Button" method="_on_pressed"]
